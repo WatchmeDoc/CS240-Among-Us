@@ -1296,6 +1296,7 @@ int give_work(int pid_1, int pid_2)
     nodes = split_tasks(player1->tasks, k / 2);
     new_player->tasks = nodes[1];
     player1->tasks = nodes[0];
+    free(nodes);
     print_double_tree();
     return 1;
 }
@@ -1411,6 +1412,7 @@ int free_all(void)
 { // free all allocated memory, didn't free heap since it did not allocate any memory at all.
     free_double_tree(players_tree);
     free(tree_guard);
+    free(completed_tasks_pq.tasks);
     free_hash_table();
     return 1;
 }
@@ -1839,7 +1841,7 @@ struct Player *search_pid(int pid)
  */
 struct Task *merge_task_trees(struct Player *player1, struct Player *player2)
 {
-    struct Task **arr1, **arr2, **arr12;
+    struct Task **arr1, **arr2, **arr12, *res;
     int n1 = task_count(player1->tasks), n2 = task_count(player2->tasks), i, j;
     if (n1 == 0 && n2 == 0)
     {
@@ -1888,7 +1890,11 @@ struct Task *merge_task_trees(struct Player *player1, struct Player *player2)
         arr12[i + j] = arr2[j];
         j++;
     }
-    return array_to_tree(arr12, 0, n1 + n2 - 1);
+    free(arr1);
+    free(arr2);
+    res = array_to_tree(arr12, 0, n1 + n2 - 1);
+    free(arr12);
+    return res;
 }
 
 /**
@@ -2255,6 +2261,7 @@ void free_hash_table()
             free(prev);
         }
     }
+    free(general_tasks_ht.tasks);
 }
 
 /**

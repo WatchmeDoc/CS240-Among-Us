@@ -21,7 +21,6 @@
 
 #define BUFFER_SIZE 1024 /* Maximum length of a line in input file */
 
-
 /* Uncomment the following line to enable debugging prints 
  * or comment to disable it */
 #define DEBUG
@@ -380,7 +379,7 @@ int main(int argc, char **argv)
 			break;
 		}
 	}
-
+	fclose(fin);
 	free_all();
 	return (EXIT_SUCCESS);
 }
