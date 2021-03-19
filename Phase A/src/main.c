@@ -360,7 +360,7 @@ int main(int argc, char **argv)
 			break;
 		}
 	}
-
+	fclose(fin);
 	free_all();
 	return (EXIT_SUCCESS);
 }
